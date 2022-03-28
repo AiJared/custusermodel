@@ -58,3 +58,51 @@ class User(AbstractBaseUser):
     REQUIRED_FIELDS = ['username']
 
     objects = customManager()
+
+    def has_perm(self, perm, obj=None):
+        return True
+    
+    def has_module_perms(self, app_label):
+        return True
+
+    @property
+    def staff(self):
+        return self.staff
+    
+    @property
+    def admin(self):
+        return self.admin
+    
+    @property
+    def active(self):
+        return self.active
+    
+    @property
+    def student(self):
+        return self.student
+    
+    @property
+    def teacher(self):
+        return self.teacher
+
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    profile_picture = models.ImageField(
+        upload_to = "profilepictures/%y/%m/%d", default="default.png"
+    )
+    # You can add your own fields
+    class Meta:
+        abstract = True
+
+class Teacher(Profile):
+    pass # you can add your own fields
+
+    def __str__(self):
+        return self.user.username
+
+class Student(Profile):
+    pass # You can also add your own fields
+
+
+    def __str__(self):
+        return self.user.username
