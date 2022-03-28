@@ -26,6 +26,20 @@ class customManager(BaseUserManager):
         user_obj.save(using=self._db)
         return user_obj
 
+        def create_staff(self, email, username, password=None):
+            user = self.create_user(
+                email, username, password, is_active=True,
+                is_admin=False, is_staff=True, is_student=False, is_teacher=False
+            )
+            return user
+        
+        def create_super_user(self, email, password=None):
+            user = self.create_user(
+                username, email, password, is_active=True,
+                is_staff=True, is_admin=True, is_student=False, is_teacher=False
+            )
+            return user
+
 class User(AbstractBaseUser):
     username = models.CharField(max_length=63, unique=True)
     email = models.EmailField(max_length=255, unique=True)
